@@ -1,0 +1,55 @@
+<?php
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+/**
+* hook_block_access.
+* Function to show/hide menu as per session.
+*/
+function lp_lib_block_access(\Drupal\block\Entity\Block $block, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  // Initialize the user session service.
+  $userSession = \Drupal::service('lp.util.session_user');
+  // Check user session authenticated.
+  
+    if ($userSession->isAuthenticated()) {
+     // if user loging not displaying login menu
+               if ($block->getPluginId() == 'system_menu_block:login') {
+                              return AccessResult::forbiddenIf($block
+      ->getRegion() != 'footer')
+      ->addCacheableDependency($block);
+               }
+  } else {
+     // if user not loging not displaying account menu 
+    if ($block->getPluginId() == 'superfish:account') {
+        return AccessResult::forbiddenIf($block
+->getRegion() != 'footer')
+->addCacheableDependency($block);
+}
+  }
+}
+
+  /**
+   * hook_entity_operation_alter
+   * modify edit link to pass the language code.
+   */
+function lp_lib_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  // Verify the page is admin/content.
+  if (\Drupal::routeMatch()->getRouteName() !=  'system.admin_content') {
+    return;
+  }
+  // Verify the access.
+  if (!(\Drupal::currentUser()->hasPermission('access content'))) {
+    return;
+  }
+  
+  $entityTypeId = $entity->getEntityTypeId();
+  // make sure we are modifying only node entity
+  if ($entityTypeId !== 'node') {
+    return;
+  }
+  // Add langcode in edit url.
+  $operations['edit']['url']->setOption('query', [
+    'language_content_entity' => \Drupal::request()->query->get('langcode'),
+  ]);
+}

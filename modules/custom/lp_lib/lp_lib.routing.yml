@@ -1,0 +1,15 @@
+lp_lib.apiTest:
+  path: 'lp/api_test'
+  defaults:
+    _form: '\Drupal\lp_lib\Form\ApiForm'
+    _title: 'API Test'
+  requirements:
+    _permission: 'access content'
+#Routing for functional maintenance setting from admin.
+lp_lib.functionalmaintenance:
+  path: '/admin/config/lifepoints/functional-maintenance/settings'
+  defaults:
+    _form: '\Drupal\lp_lib\Form\FunctionalMaintenanceForm'
+    _title: 'Functional maintenance configurations'
+  requirements:
+    _permission: 'administer site configuration'

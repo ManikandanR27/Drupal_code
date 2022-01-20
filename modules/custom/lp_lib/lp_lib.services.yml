@@ -1,0 +1,114 @@
+services:
+  # Common web services client
+  lp.commonservice.response:
+    class: Drupal\lp_lib\WsClient\CommonServiceResponse
+  lp.commonservice.client:
+    class: Drupal\lp_lib\WsClient\CommonServiceClient
+    arguments: ['@settings', '@http_client', '@lp.configuration', '@lp.util.session_user']
+    #arguments: ['@config.factory', '@http_client', '@lp.commonservice.response']
+  lp.commonservice.config:
+    class: Drupal\Core\Config\ConfigFactory
+    arguments: ['@config.storage', '@event_dispatcher', '@config.typed']
+    calls:
+      - [get, ['common_service']]
+
+  # Lifepoints services
+  lp.registration:
+    class: Drupal\lp_lib\LifePoints\Registration
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user', '@request_stack']
+  lp.login:
+    class: Drupal\lp_lib\LifePoints\Login
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user', '@request_stack']
+  lp.UCM:
+    class: Drupal\lp_lib\LifePoints\UCM
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user', '@request_stack']
+  lp.firehose:
+    class: Drupal\lp_lib\LifePoints\FirehoseIngestion
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.myprofile:
+    class: Drupal\lp_lib\LifePoints\Myprofile
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user', '@request_stack']
+  lp.unsubscribe:
+    class: Drupal\lp_lib\LifePoints\Unsubscribe
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.myactivity:
+    class: Drupal\lp_lib\LifePoints\MyActivity
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user', '@request_stack']
+  lp.zendesk:
+    class: Drupal\lp_lib\LifePoints\Zendesk
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.rewards:
+    class: Drupal\lp_lib\LifePoints\Rewards
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.mysurveys:
+    class: Drupal\lp_lib\LifePoints\MySurveys
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.eventreward:
+    class: Drupal\lp_lib\LifePoints\EventReward
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.cookie.preferences:
+    class: Drupal\lp_lib\LifePoints\CookiePreferences
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.deeplink_builder:
+    class: Drupal\lp_lib\LifePoints\DeeplinkBuilder
+    arguments: ['@request_stack']
+  lp.adobe.analytics:
+    class: Drupal\lp_lib\LifePoints\AdobeAnalytics
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.fab:
+    class: Drupal\lp_lib\LifePoints\FAB
+    arguments: ['@lp.commonservice.client']
+  lp.ssq:
+    class: Drupal\lp_lib\LifePoints\SSQ
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+
+  # Lifepoints Configuration
+  lp.configuration:
+    class: Drupal\lp_lib\LifePoints\PanelConfiguration
+  #lp.portalbehavior:
+   # class: Drupal\lp_lib\LifePoints\PortalBehavior
+  lp.portalbehavior:
+    class: Drupal\lp_lib\LifePoints\portalBehavior
+  # Survey Settings Configuration
+  lp.surveysettingsconfiguration:
+    class: Drupal\lp_lib\LifePoints\SurveySettingsConfiguration
+  # Survey Settings Configuration
+  lp.surveyendmessagesconfiguration:
+    class: Drupal\lp_lib\LifePoints\SurveyEndMessagesConfiguration
+  # Survey Satisfaction Questions Configuration
+  lp.surveySatisfactionQuestionsConfiguration:
+    class: Drupal\lp_lib\LifePoints\SurveySatisfactionQuestionsConfiguration
+
+
+  # UTIL Services
+  lp.util.validation:
+    class: Drupal\lp_lib\Util\Validation
+  lp.util.mapping.usages:
+    class: Drupal\lp_lib\Util\MappingUsages
+  lp.util.session:
+    class: Drupal\lp_lib\Session\SessionBackendDefault
+    arguments: ['@session', '@tempstore.private', '@current_user']
+  lp.util.session_user:
+    class: Drupal\lp_lib\Util\UserSession
+    arguments: ['@lp.util.session', '@settings', '@request_stack']
+  lp.util.TwigExtension:
+    class: Drupal\lp_lib\Util\TwigExtension
+    arguments: ['@lp.util.session_user']
+    tags:
+      - { name: twig.extension }
+
+
+  # Symfony services
+  #xml_encoder:
+  #  class: Symfony\Component\Serializer\Encoder\XmlEncoder
+  redirect_response:
+    class: Symfony\Component\HttpFoundation\RedirectResponse
+    arguments: ['url']
+
+  # Cusiosity services
+  lp.curiosity.questions:
+    class: Drupal\lp_lib\LifePoints\CuriosityQuestions
+    arguments: ['@lp.commonservice.client', '@lp.util.session_user']
+  lp.get_curiosity_questions:
+    class: Drupal\lp_lib\LifePoints\GetCuriosityQuestions
+    arguments: ['@lp.util.session', '@lp.util.session_user', '@lp.curiosity.questions']

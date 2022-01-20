@@ -1,0 +1,5 @@
+lp_lib.functionalmaintenance:
+  title: 'Functional maintenance configurations'
+  description: 'Allows admin to put website registration/login on-hold based on date & time settings'
+  parent: lp_import_terms.admin_config_lifepoints
+  route_name: lp_lib.functionalmaintenance

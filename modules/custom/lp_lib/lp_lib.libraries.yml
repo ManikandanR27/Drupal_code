@@ -1,0 +1,7 @@
+lp_lib_deeplink_scripts:
+  header: false
+  js:
+    js/lp_deeplinks.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

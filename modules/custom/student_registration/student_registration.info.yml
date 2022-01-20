@@ -1,5 +1,7 @@
-name: Student Registration
+name: Login
 type: module
 description: Module for implementing custom form for student registration.
 core_version_requirement: ^8.8 || ^9
 package: Example
+dependencies:
+  - lp_lib

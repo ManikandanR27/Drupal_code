@@ -1,0 +1,6 @@
+name: LifePoints - Library
+type: module
+description: Shared Library for Lifepoints Module to handel api requests, common util library classes and Session handling.
+package: LifePoints
+core: '8.x'
+core_version_requirement: ^8 || ^9

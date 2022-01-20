@@ -480,6 +480,7 @@ $settings['update_free_access'] = FALSE;
  * pointing to the same server. Do not include a trailing slash.
  */
 # $settings['file_public_base_url'] = 'http://downloads.example.com/files';
+$base_url = 'http://jade-usrmgmnt-lb-1497249384.us-west-2.elb.amazonaws.com/';
 
 /**
  * Public file path:
